@@ -1,5 +1,5 @@
 
-import {  createRouter, createMemoryHistory } from 'vue-router'
+import {  createRouter,  createWebHistory } from 'vue-router'
 
 import { LoginPage, 
         PerfilPage, 
@@ -30,7 +30,7 @@ const routes = [
 ]
 
 const  router = createRouter( { 
-    history: createMemoryHistory(),
+    history: createWebHistory(),
     routes
 } );
 
