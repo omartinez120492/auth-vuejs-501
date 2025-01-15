@@ -6,7 +6,9 @@ import {  RouterView } from 'vue-router'
 
 <template>
     <NavBar/>
-    <RouterView />
+    <div class="container-fluid">
+        <RouterView />
+    </div>
 </template>
 
 <style>

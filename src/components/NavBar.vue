@@ -1,5 +1,14 @@
 <script setup>
-import {RouterLink } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
+import { useUserStore } from '../store'
+import { storeToRefs } from 'pinia';
+
+const router = useRouter()
+const useUser = useUserStore()
+const { user } = storeToRefs(useUser)
+const { logoutUser } = useUser
+
+
 </script>
 
 <template>
@@ -15,16 +24,16 @@ import {RouterLink } from 'vue-router'
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
+                    <li v-if="user != null" class="nav-item">
                         <RouterLink class="nav-link active" aria-current="page" to="/">Auth</RouterLink>
                     </li>
-                    <li class="nav-item">
+                    <li v-if="user == null" class="nav-item">
                         <RouterLink class="nav-link" to="/login">Login</RouterLink>
                     </li>
-                    <li class="nav-item">
+                    <li  v-if="user != null" class="nav-item">
                         <RouterLink class="nav-link" to="/perfil">Perfil</RouterLink>
                     </li>
-                    <li class="nav-item">
+                    <li  v-if="user != null"  class="nav-item">
                         <RouterLink class="nav-link" to="/register">Register</RouterLink>
                     </li>
                     <li class="nav-item dropdown">
@@ -45,9 +54,9 @@ import {RouterLink } from 'vue-router'
                         <a class="nav-link disabled" aria-disabled="true">Disabled</a>
                     </li>
                 </ul>
-                <form class="d-flex" role="search">
+                <form  v-if="user != null"  class="d-flex" role="search">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-danger" type="submit">Logout</button>
+                    <button v-on:click="logoutUser(router)"  class="btn btn-outline-danger" type="submit">Logout</button>
                 </form>
             </div>
         </div>
