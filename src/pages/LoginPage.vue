@@ -2,24 +2,33 @@
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router'
 import { useUserStore } from '../store'
+import Alert from '../components/Alert.vue'
+import { storeToRefs } from 'pinia';
 
-const store = useUserStore();
-const { loginUser } = store;
 const router = useRouter()
+const store = useUserStore();
+
+const { error } = storeToRefs(store)
+const { loginUser } = store;
+
 
 const email = ref('cursortest@gmail.com')
 const password = ref('grupo501')
+
 const isActive = computed(() => {
     if (email.value.length > 4 && password.value.length >= 4) return false;
     return true;
 })
 
-const handledSubmit = () => {
+const handledSubmit = async () => {
     try {
-        loginUser(email.value, password.value, router)
+        const resp = await loginUser(email.value, password.value)
+
+        if (resp.email && resp.uid) return router.push('/')
+
         email.value = password.value = ''
     } catch (error) {
-        console.log({'ErrorLogin': error});
+        console.log({ 'ErrorLogin': error });
     }
 }
 
@@ -31,6 +40,10 @@ const handledSubmit = () => {
         <div class="col-4">
             <h1 class=" text-center text-primary display-6"> Login </h1>
             <hr class="text-primary">
+
+            <!-- TODO:  Alerta -->
+            <Alert v-if="error != null" :error="error" ></Alert>
+
             <form @:submit.prevent="handledSubmit">
                 <div class="form-floating mb-3">
                     <input id="correo" class="form-control" type="email" placeholder="omar1204@gmail.com" name="email"

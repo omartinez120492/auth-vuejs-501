@@ -8,6 +8,14 @@ const useUser = useUserStore()
 const { user } = storeToRefs(useUser)
 const { logoutUser } = useUser
 
+const handledLogout = async () => {
+    try {
+        const resp = await logoutUser()
+        if (resp.email === null) return router.push('/login')
+    } catch (error) {
+
+    }
+}
 
 </script>
 
@@ -30,10 +38,10 @@ const { logoutUser } = useUser
                     <li v-if="user == null" class="nav-item">
                         <RouterLink class="nav-link" to="/login">Login</RouterLink>
                     </li>
-                    <li  v-if="user != null" class="nav-item">
+                    <li v-if="user != null" class="nav-item">
                         <RouterLink class="nav-link" to="/perfil">Perfil</RouterLink>
                     </li>
-                    <li  v-if="user != null"  class="nav-item">
+                    <li v-if="user != null" class="nav-item">
                         <RouterLink class="nav-link" to="/register">Register</RouterLink>
                     </li>
                     <li class="nav-item dropdown">
@@ -54,9 +62,9 @@ const { logoutUser } = useUser
                         <a class="nav-link disabled" aria-disabled="true">Disabled</a>
                     </li>
                 </ul>
-                <form  v-if="user != null"  class="d-flex" role="search">
+                <form @submit.prevent="handledLogout" v-if="user != null" class="d-flex" role="search">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button v-on:click="logoutUser(router)"  class="btn btn-outline-danger" type="submit">Logout</button>
+                    <button class="btn btn-outline-danger" type="submit">Logout</button>
                 </form>
             </div>
         </div>

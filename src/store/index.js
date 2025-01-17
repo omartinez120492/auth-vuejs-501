@@ -12,26 +12,38 @@ export const useUserStore = defineStore('userState', {
     },
 
     actions: {
-        async loginUser(email, passwor, router) {
+        async loginUser(email, passwor) {
             try {
                 const userCredential = await signInWithEmailAndPassword(auth, email, passwor);
                 this.user = userCredential.user;
                 this.uid = userCredential.user.uid;
-                await router.push('/');
+                return {
+                    email: this.user.email,
+                    uid: this.uid
+                }
             } catch (error) {
-                console.log({ 'Code': error.code, 'message': error.message });
+                switch (error.code) {
+                    case 'auth/invalid-credential':
+                        this.error = 'Email o Password Incorrectos'   
+                    break;
+                
+                    default:
+                        break;
+                }
             }
             return;
         },
 
-        async logoutUser( router ) {
+        async logoutUser( ) {
             try {
                 await signOut(auth);
                 this.user = null;
                 this.uid = null;
-                await router.push('/login')
+                return {
+                    email: null
+                }
             } catch (error) {
-
+                
             }
             return;
         }
