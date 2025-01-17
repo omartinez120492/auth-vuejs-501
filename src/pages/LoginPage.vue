@@ -42,7 +42,7 @@ const handledSubmit = async () => {
             <hr class="text-primary">
 
             <!-- TODO:  Alerta -->
-            <Alert v-if="error != null" :error="error" ></Alert>
+            <Alert v-if="error.tipo === 'credencial' " :error="error" ></Alert>
 
             <form @:submit.prevent="handledSubmit">
                 <div class="form-floating mb-3">

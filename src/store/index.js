@@ -24,9 +24,23 @@ export const useUserStore = defineStore('userState', {
             } catch (error) {
                 switch (error.code) {
                     case 'auth/invalid-credential':
-                        this.error = 'Email o Password Incorrectos'   
-                    break;
-                
+                        this.error = {
+                            tipo: 'credencial',
+                            mensaje: 'Email o Password Incorrectos'
+                        }
+                        break;
+                    case 'auth/missing-password':
+                        this.error = {
+                            tipo: 'password',
+                            mensaje: 'Password Incorrecto'
+                        }
+                        break;
+                    case 'auth/invalid-email':
+                        this.error = {
+                            tipo: 'email',
+                            mensaje: 'Email Incorrecto'
+                        }
+                        break;
                     default:
                         break;
                 }
@@ -34,7 +48,7 @@ export const useUserStore = defineStore('userState', {
             return;
         },
 
-        async logoutUser( ) {
+        async logoutUser() {
             try {
                 await signOut(auth);
                 this.user = null;
@@ -43,7 +57,7 @@ export const useUserStore = defineStore('userState', {
                     email: null
                 }
             } catch (error) {
-                
+
             }
             return;
         }
