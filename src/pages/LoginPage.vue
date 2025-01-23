@@ -23,12 +23,15 @@ const isActive = computed(() => {
 const handledSubmit = async () => {
     try {
         const resp = await loginUser(email.value, password.value)
-
-        if (resp.email && resp.uid) return router.push('/')
+        console.log('to home')
+        if (resp.email && resp.uid) {
+            console.log('router.push')
+            return router.push('/')
+        }
 
         email.value = password.value = ''
-    } catch (error) {
-        console.log({ 'ErrorLogin': error });
+    } catch (errores) {
+        console.log({ 'ErrorLogin': errores });
     }
 }
 
@@ -40,9 +43,7 @@ const handledSubmit = async () => {
         <div class="col-4">
             <h1 class=" text-center text-primary display-6"> Login </h1>
             <hr class="text-primary">
-
-            <!-- TODO:  Alerta -->
-            <Alert v-if="error.tipo === 'credencial' " :error="error" ></Alert>
+            <Alert v-if="error" :error="error" ></Alert>
 
             <form @:submit.prevent="handledSubmit">
                 <div class="form-floating mb-3">

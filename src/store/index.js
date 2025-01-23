@@ -1,6 +1,6 @@
 
 import { defineStore } from 'pinia';
-import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebase/auth';
 import auth from '../firebase'
 
 export const useUserStore = defineStore('userState', {
@@ -60,6 +60,22 @@ export const useUserStore = defineStore('userState', {
 
             }
             return;
+        },
+        async getCurrentUser() {
+            try {
+                console.log('antes del current')
+                const user = await onAuthStateChanged(auth);
+                console.log({ 'despues ': user })
+                if (user) {
+                    this.uid = user.uid;
+                    return true;
+                } else {
+                    this.uid = null;
+                    return false;
+                }
+            } catch (error) {
+                console.log(error)
+            }
         }
     }
 });
